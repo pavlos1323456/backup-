@@ -1,0 +1,65 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.mystep.tracker">
+
+
+    <!-- Activity Recognition (για pedometer και γενικά motion data) -->
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+
+    <!-- Health Connect (Android 14+) — διαβάζουμε βήματα της ημέρας -->
+    <uses-permission android:name="android.permission.health.READ_STEPS" />
+    <!-- Αν στο μέλλον θες να γράφεις βήματα στο Health Connect, ξεκλείδωσε κι αυτό -->
+    <!-- <uses-permission android:name="android.permission.health.WRITE_STEPS" /> -->
+
+    <!-- Προαιρετικά για ιστορικά/υπόβαθρο (μόνο αν τα χρησιμοποιήσεις στον κώδικα) -->
+    <!-- <uses-permission android:name="android.permission.health.READ_HEALTH_DATA_HISTORY" /> -->
+    <!-- <uses-permission android:name="android.permission.health.READ_HEALTH_DATA_IN_BACKGROUND" /> -->
+
+    <!-- Δηλώνουμε τους αισθητήρες ως προαιρετικούς ώστε να τρέχει και σε συσκευές χωρίς step counter -->
+    <uses-feature android:name="android.hardware.sensor.stepcounter" android:required="false" />
+    <uses-feature android:name="android.hardware.sensor.stepdetector" android:required="false" />
+
+    <application
+        android:name="${applicationName}"
+        android:label="AuraStep"
+        android:icon="@mipmap/ic_launcher">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:taskAffinity=""
+            android:theme="@style/LaunchTheme"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode">
+
+            <!-- Theme που εφαρμόζεται πριν φορτώσει το Flutter UI -->
+            <meta-data
+                android:name="io.flutter.embedding.android.NormalTheme"
+                android:resource="@style/NormalTheme" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- Προαιρετικό: intent για rationale των Health Connect permissions -->
+            <intent-filter>
+                <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE" />
+            </intent-filter>
+        </activity>
+
+        <!-- Απαιτείται από το Flutter embedding -->
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
+    </application>
+
+    <!-- Package visibility για PROCESS_TEXT (default από Flutter template) -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.PROCESS_TEXT" />
+            <data android:mimeType="text/plain" />
+        </intent>
+    </queries>
+</manifest>
